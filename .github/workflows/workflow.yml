@@ -5,5 +5,7 @@ on:
       - main
 jobs:
   push-to-docker:
-    - name: "test push"
-      run: echo "it was pushed"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "test push"
+        run: echo "it was pushed"
