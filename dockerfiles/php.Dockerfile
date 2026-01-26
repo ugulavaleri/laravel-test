@@ -2,7 +2,7 @@ FROM php:8.4-fpm
 
 WORKDIR /var/www/html
 
-COPY ./src .
+COPY . .
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \

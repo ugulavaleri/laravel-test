@@ -4,13 +4,13 @@ services:
       context: .
       dockerfile: ./dockerfiles/php.Dockerfile
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
   nginx:
     build:
       context: .
       dockerfile: ./dockerfiles/nginx.Dockerfile
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
     depends_on:
       - php
     ports:
@@ -22,19 +22,19 @@ services:
     volumes:
       - data:/var/lib/mysql
     env_file:
-      - ./src/.env
+      - ./.env
   artisan:
     build:
       context: .
       dockerfile: ./dockerfiles/php.Dockerfile
     entrypoint: ["php", "/var/www/html/artisan"]
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
   composer:
     image: composer
     working_dir: /var/www/html
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
 
 volumes:
   data:
