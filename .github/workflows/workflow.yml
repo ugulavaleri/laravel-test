@@ -1,0 +1,9 @@
+name: workflow.yml
+on:
+  push:
+    branches:
+      - main
+jobs:
+  push-to-docker:
+    - name: "test push"
+      run: echo "it was pushed"

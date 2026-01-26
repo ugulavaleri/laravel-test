@@ -1,0 +1,40 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/php.Dockerfile
+    volumes:
+      - ./src:/var/www/html
+  nginx:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/nginx.Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    ports:
+      - "8000:8000"
+  mysql:
+    image: mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - data:/var/lib/mysql
+    env_file:
+      - ./src/.env
+  artisan:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/php.Dockerfile
+    entrypoint: ["php", "/var/www/html/artisan"]
+    volumes:
+      - ./src:/var/www/html
+  composer:
+    image: composer
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
+
+volumes:
+  data:
