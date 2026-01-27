@@ -1,16 +1,12 @@
 services:
   nginx:
     restart: always
-    build:
-      context: .
-      dockerfile: dockerfiles/nginx.prod.Dockerfile
+    image: leriugulava/laravel-nginx
   php:
     restart: always
     depends_on:
       - nginx
-    build:
-      context: .
-      dockerfile: dockerfiles/php.prod.Dockerfile
+    image: leriugulava/laravel-php
   mysql:
     image: mysql
     volumes:
