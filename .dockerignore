@@ -2,8 +2,8 @@ node_modules
 .git
 .env
 tests
-storage/framework/cache/data/*
-storage/framework/sessions/*
-storage/framework/views/*
-storage/logs/*
+#storage/framework/cache/data/*
+#storage/framework/sessions/*
+#storage/framework/views/*
+#storage/logs/*
 .dockerignore
