@@ -1,0 +1,19 @@
+services:
+  nginx:
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfiles/nginx.prod.Dockerfile
+  php:
+    restart: always
+    depends_on:
+      - nginx
+    build:
+      context: .
+      dockerfile: dockerfiles/php.prod.Dockerfile
+  mysql:
+    image: mysql
+    volumes:
+      - data:/var/lib/mysql
+    env_file:
+      - .env

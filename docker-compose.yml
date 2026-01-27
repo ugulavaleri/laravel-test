@@ -14,11 +14,11 @@ services:
     depends_on:
       - php
     ports:
-      - "8000:8000"
+      - "8000:80"
   mysql:
     image: mysql
     ports:
-      - '3306:3306'
+      - '3307:3306'
     volumes:
       - data:/var/lib/mysql
     env_file:

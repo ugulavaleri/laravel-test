@@ -7,5 +7,23 @@ jobs:
   push-to-docker:
     runs-on: ubuntu-latest
     steps:
-      - name: "test push"
-        run: echo "it was pushed"
+      - name: Login Docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push PHP Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          dockerfile: ./dockerfiles/php.prod.Dockerfile
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-php:latest
+      - name: Push Nginx Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          dockerfile: ./dockerfiles/php.prod.Dockerfile
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nginx:latest
+
