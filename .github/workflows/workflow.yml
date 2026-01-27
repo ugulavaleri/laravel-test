@@ -75,7 +75,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           script: |
               docker compose -f docker-compose.prod.yml pull
-              docker compose -f docker-compose.prod.yml -d up
+              docker compose -f docker-compose.prod.yml up -d
               docker image prune -f
 
 
