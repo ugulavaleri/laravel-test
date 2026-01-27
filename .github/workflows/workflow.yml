@@ -17,13 +17,13 @@ jobs:
         with:
           context: .
           push: true
-          dockerfile: ./dockerfiles/php.prod.Dockerfile
+          file: ./dockerfiles/php.prod.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-php:latest
       - name: Push Nginx Image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          dockerfile: ./dockerfiles/php.prod.Dockerfile
+          file: ./dockerfiles/php.prod.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nginx:latest
 
