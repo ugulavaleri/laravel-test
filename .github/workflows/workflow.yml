@@ -26,6 +26,56 @@ jobs:
         with:
           context: .
           push: true
-          file: ./dockerfiles/php.prod.Dockerfile
+          file: ./dockerfiles/nginx.prod.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nginx:latest
+  deploy:
+    needs: push-to-docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v6
+      - name: SSH into server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.USERNAME }}
+          script: |
+            mkdir -p ~/laravel-app
+      - name: Create Environment
+        run: |
+          echo "APP_NAME=Laravel-test" > .env
+          echo "APP_ENV=production" >> .env
+          echo "APP_DEBUG=${{ secrets.APP_DEBUG }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
 
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+          echo "LOG_CHANNEL=stack" >> .env
+          echo "LOG_LEVEL=error" >> .env
+      - name: Copy Compose In Production
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: 'docker-compose.prod.yml,.env'
+          target: laravel-app
+      - name: Pull Nginx Image
+        uses: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nginx:latest
+      - name: Pull PHP Image
+        uses: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-php:latest
+      - name: Run App
+        run: docker compose -f docker-compose.prod.yml up
+
+
+
+
+# laravel-test-prod
+# 123123123
