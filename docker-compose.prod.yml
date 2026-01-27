@@ -1,15 +1,17 @@
 services:
   nginx:
     restart: always
+    depends_on:
+      - php
     image: leriugulava/laravel-nginx
     ports:
       - '80:80'
   php:
     restart: always
-    depends_on:
-      - nginx
     env_file:
       - .env
+    volumes:
+      - ./.env:/var/www/html/.env
     image: leriugulava/laravel-php
   mysql:
     image: mysql
@@ -17,5 +19,8 @@ services:
       - data:/var/lib/mysql
     env_file:
       - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
 volumes:
   data:
